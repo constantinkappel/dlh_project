@@ -233,6 +233,13 @@ eICU
 
 \begin_layout Section
 Scientific Approach
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Scientific-Approach"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Enumerate
@@ -268,6 +275,7 @@ backgroundcolor "none"
 status open
 
 \begin_layout Verbatim
+
 pyhealth
 \end_layout
 
@@ -314,6 +322,22 @@ literal "false"
  
 \end_layout
 
+\begin_layout Standard
+As we outlined in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Feasibility-of-the"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ we will not do comprehensive pre-training from scratch, but work with pre-train
+ed architectures, which we may fine-tune for our experiments.
+ 
+\end_layout
+
 \begin_layout Section
 Hypotheses to be tested
 \begin_inset CommandInset label
@@ -344,8 +368,23 @@ Put citations for all these!
 
 \end_inset
 
- BERT-based architectures, such as BioBERT, ClinicalBERT and BlueBERT, which
- were partially trained or fine-tuned on medical literature.
+ BERT-based architectures, such as BioBERT 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "lee_biobert_2019"
+literal "false"
+
+\end_inset
+
+, ClinicalBERT 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "huang_clinicalbert_2020"
+literal "false"
+
+\end_inset
+
+ and BlueBERT, which were partially trained or fine-tuned on medical literature.
  In contrast, Gu et al.
  
 \begin_inset CommandInset citation
@@ -404,8 +443,349 @@ literal "false"
 Data access 
 \end_layout
 
+\begin_layout Standard
+The two datasets we plan on utilizing, namely MIMIC-III 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "johnson_mimic-iii_2015,johnson_mimic-iii_2016"
+literal "false"
+
+\end_inset
+
+ and eICU 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "pollard_eicu_2018"
+literal "false"
+
+\end_inset
+
+, are both publicly available.
+ We will need to take into account some regulations and license conditions
+ concerning data safety and privacy.
+\end_layout
+
 \begin_layout Section
 Feasibility of the computation
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Feasibility-of-the"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As far as computational cost is concernced let's consider the size of the
+ data and the size of the model architecture we need to train.
+ 
+\end_layout
+
+\begin_layout Subsection
+Model architecture
+\end_layout
+
+\begin_layout Standard
+According to 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ p.
+ 4, bottom right paragraph, the largest architecture the authors trained
+ was BERT-base, which has 110 M (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$10^6$
+\end_layout
+
+\end_inset
+
+) parameters.
+ Other models the authors experimented with include BioBERT and ClinicalBERT,
+ which are based on BERT-base, too.
+ Let's do a quick estimate
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Assuming 32-bit single precision computation
+\end_layout
+
+\end_inset
+
+ of how much GPU memory is needed to load and train such a model: 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bytes per parameter
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model parameters
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adam optimizer
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gradients
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Activations and temp memory
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TOTAL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, a model with 110 M parameters would consume 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$110 
+\backslash
+cdot 10^6 
+\backslash
+times 24 bytes =  2.46 GB$
+\end_layout
+
+\end_inset
+
+ to just load the model.
+ This managable on modern-day GPUs.
+ One of the authors has a GTX 3080 with 12 GB of VRAM available for full
+ training and a GTX 1070 with 8 GB is available to do some code testing
+ on small batches.
+ As mentioned in sections 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Scientific-Approach"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Hypotheses-to-be"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ we are not planning to do pretraining.
+ While Hur et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ did not explicitely provide information on training time, the authors of
+ BioBERT mentioned that pre-training took 10 days on a V100 GPU.
+ Given the iterative nature of the doing model training and the amount of
+ time we can spend, the cost for pre-training from scratch would be prohibitive
+ for us.
+ So, we will only do inferencing with available pre-trained architectures
+ and fine-tuning where applicable.
+ 
+\end_layout
+
+\begin_layout Subsection
+Datasets
+\end_layout
+
+\begin_layout Standard
+We will use two datasets 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+literature
+\end_layout
+
+\end_inset
+
+: MIMIC-III and eICU.
+ According to ...
+ the MIMIC-III dataset is a large, de-identified, and publicly-available
+ collection of medical records.
+ It consists of 112,000 clinical reports records with an average length
+ of 709.3 tokens.
+ The dataset includes 1,159 top-level ICD-9 codes, and each report is assigned
+ to 7.6 codes on average.
+ This makes for about 78056000 tokens in MIMIC-III.
+ 
+\begin_inset Newline newline
+\end_inset
+
+(?? expand the calculation ?? )
+\begin_inset Newline newline
+\end_inset
+
+The eICU Collaborative Research Database holds data associated with over
+ 200,000 patient stays, providing a large sample size for research studies.
+\begin_inset Newline newline
+\end_inset
+
+(?? expand this ??)
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+According to 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "devlin_bert_2019"
+literal "false"
+
+\end_inset
+
+ the size of the token embeddings is 768, the number of transformer blocks
+ is 12 and the number of self-attention heads is 12.
+ 
+\end_layout
+
+\begin_layout Standard
+(?? use for building an argument over computation time, also using ??)
 \end_layout
 
 \begin_layout Section

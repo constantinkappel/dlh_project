@@ -444,23 +444,8 @@ Data access
 \end_layout
 
 \begin_layout Standard
-The two datasets we plan on utilizing, namely MIMIC-III 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "johnson_mimic-iii_2015,johnson_mimic-iii_2016"
-literal "false"
-
-\end_inset
-
- and eICU 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "pollard_eicu_2018"
-literal "false"
-
-\end_inset
-
-, are both publicly available.
+The two datasets we plan on utilizing, namely MIMIC-III and eICU, are both
+ publicly available.
  
 \end_layout
 
