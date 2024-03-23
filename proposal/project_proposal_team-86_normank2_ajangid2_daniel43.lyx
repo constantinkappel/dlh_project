@@ -1,0 +1,428 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{enumitem}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\usepackage{titlesec}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{siunitx}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle false
+\pdf_quoted_options "allcolors=MidnightBlue"
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1.25in
+\topmargin 1in
+\rightmargin 1.25in
+\bottommargin 1.25in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+● Missing citation to the original paper (-1) ● Missing general problem
+ (-2) ● Missing specific approach (-2) ● Missing hypotheses to be tested
+ (-2) ● Missing ablations planned (-2) ● Missing description of how you
+ will access the data (-2) ● Missing discussion of the feasibility of the
+ computation (-2) ● Missing statement of whether you will use the existing
+ code or not (-2) ● Exceed page limits (-1)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+CS 598 DLH Project Proposal 
+\end_layout
+
+\begin_layout Author
+Amit Jangid, Constantin Kappel, Daniel Sanchez
+\end_layout
+
+\begin_layout Date
+March 24th 2024
+\end_layout
+
+\begin_layout Address
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0cm}
+\end_layout
+
+\end_inset
+
+ajangid2@illinois.edu, normank2@illinois.edu, daniel43@illinois.edu
+\end_layout
+
+\begin_layout Section
+Citation to original Paper
+\end_layout
+
+\begin_layout Standard
+We picked a publication by Hur et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ titled 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+Unifying Heterogeneous Electronic Health Records Systems via Text-Based
+ Code Embedding
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+General Problem
+\end_layout
+
+\begin_layout Standard
+While EHR (Electronic Health Records) provide an attractive data source
+ to do research on exposures and disease, there are many heterogenous medical
+ code formats used by different healthcare providers.
+ Thus, clinical studies using EHRs are difficult to scale up due to data
+ incompatibilities.
+ The technical hurdle is that previous systems learned hidden representations
+ (latent embeddings) for each code system which projected the same medical
+ concept with different encodings into different, incompatible semantic
+ spaces.
+ The paper 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ learns from the unstructured textual descriptions instead of the medcodes
+ themselves, a strategy which the authors termed 
+\emph on
+description embedding
+\emph default
+ (
+\emph on
+DescEmb
+\emph default
+).
+ Using 
+\emph on
+DescEmb
+\emph default
+ the authors were able to pool differently structured EHRs, namely 
+\emph on
+MIMIC-III 
+\emph default
+and 
+\emph on
+eICU
+\emph default
+, into one larger dataset and achieved higher accuracy.
+ 
+\end_layout
+
+\begin_layout Section
+Scientific Approach
+\end_layout
+
+\begin_layout Enumerate
+First, we will try to replicate the results of 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ as a baseline.
+\end_layout
+
+\begin_layout Enumerate
+We plan on using 
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Verbatim
+pyhealth
+\end_layout
+
+\end_inset
+
+where applicable.
+ Especially for handling EHR data this should be very helpful.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Thirdly, we intend to test a hypothesis described in more detail in section
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Hypotheses-to-be"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ In short, we would like to replace the BERT
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Bidirectional Encoder Representations from Transformers 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "devlin_bert_2019"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+-derived encoders by one which was pretrained from scratch on biomedical
+ data.
+ 
+\end_layout
+
+\begin_layout Section
+Hypotheses to be tested
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Hypotheses-to-be"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The authors of 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ conducted experiments with several 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Put citations for all these!
+\end_layout
+
+\end_inset
+
+ BERT-based architectures, such as BioBERT, ClinicalBERT and BlueBERT, which
+ were partially trained or fine-tuned on medical literature.
+ In contrast, Gu et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gu_domain-specific_2022"
+literal "false"
+
+\end_inset
+
+ found that pre-training on generic NLP corpi, such as derived from Wikipedia,
+ actually perform worse than ones which have been initialized with random
+ values and only pre-trained on PubMed.
+ They called their model PubMedBERT and were able to demonstrate superior
+ performance to the models employed by 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We would like to test if PubMedBERT is capable of matching or even superceding
+ the performance of the other models utilized, which were not fully pre-trained
+ on pure corpi from the biomedical domain.
+ 
+\end_layout
+
+\begin_layout Section
+Ablations planned
+\end_layout
+
+\begin_layout Standard
+A true ablation study with PubMedBERT and e.g.
+ ClinicalBERT or BioBERT would mean we would have to pre-train all these
+ architectures from scratch on both, generic NLP corpi as well as PubMed.
+ This will not be computationally feasible.
+ Instead, we will cite the work of 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gu_domain-specific_2022"
+literal "false"
+
+\end_inset
+
+ where applicable and rather try to replicate their results with different,
+ already pre-trained architectures.
+ 
+\end_layout
+
+\begin_layout Section
+Data access 
+\end_layout
+
+\begin_layout Section
+Feasibility of the computation
+\end_layout
+
+\begin_layout Section
+Existing Code
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintCited"
+bibfiles "Literature_Project_Ref"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
