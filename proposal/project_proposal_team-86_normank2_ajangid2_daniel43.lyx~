@@ -14,21 +14,25 @@
 \usepackage{enumitem}
 \usepackage{array}
 \usepackage{siunitx}
+%%%%%%%%%%%%%%%
+%% FEEL FREE TO ADD MORE PACKAGES %%% 
+%%%%%%
+%%% LaTeX 
+%% https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
+%% https://www.overleaf.com/learn/latex/Positioning_images_and_tables 
+
+%%% TODO: change TOPIC to your title
+\title{CS447 Literature Review: Biomedical Information Extraction}
 \end_preamble
-\use_default_options true
-\begin_modules
-theorems-ams
-eqs-within-sections
-figs-within-sections
-\end_modules
+\use_default_options false
 \maintain_unincluded_children false
 \language english
-\language_package default
+\language_package none
 \inputencoding utf8
-\fontencoding global
-\font_roman "default" "default"
+\fontencoding default
+\font_roman "times" "default"
 \font_sans "default" "default"
-\font_typewriter "default" "default"
+\font_typewriter "mathptmx" "default"
 \font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
@@ -41,51 +45,51 @@ figs-within-sections
 \graphics default
 \default_output_format default
 \output_sync 0
-\bibtex_command bibtex
+\bibtex_command default
 \index_command default
-\paperfontsize default
+\paperfontsize 11
 \spacing single
-\use_hyperref false
-\pdf_bookmarks true
+\use_hyperref true
+\pdf_bookmarks false
 \pdf_bookmarksnumbered false
 \pdf_bookmarksopen false
 \pdf_bookmarksopenlevel 1
 \pdf_breaklinks false
 \pdf_pdfborder false
-\pdf_colorlinks false
-\pdf_backref false
+\pdf_colorlinks true
+\pdf_backref section
 \pdf_pdfusetitle false
 \pdf_quoted_options "allcolors=MidnightBlue"
-\papersize default
+\papersize letterpaper
 \use_geometry true
 \use_package amsmath 1
-\use_package amssymb 1
-\use_package cancel 1
+\use_package amssymb 0
+\use_package cancel 0
 \use_package esint 1
-\use_package mathdots 1
-\use_package mathtools 1
-\use_package mhchem 1
-\use_package stackrel 1
-\use_package stmaryrd 1
-\use_package undertilde 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
 \cite_engine natbib
-\cite_engine_type numerical
+\cite_engine_type authoryear
 \biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
 \justification true
-\use_refstyle 1
+\use_refstyle 0
 \use_minted 0
 \index Index
 \shortcut idx
 \color #008000
 \end_index
-\leftmargin 1.25in
+\leftmargin 1.1in
 \topmargin 1in
-\rightmargin 1.25in
-\bottommargin 1.25in
+\rightmargin 1.1in
+\bottommargin 1.1in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -775,7 +779,6 @@ Note: The calculation presented there was originally made for decoder-only
  architectures like GPT, while BERT is an encoder-only, bidirectional architectu
 re.
  For the sake of a rough estimate we disregarded that fact here.
- 
 \end_layout
 
 \end_inset
@@ -800,7 +803,6 @@ literal "false"
 
  the size of the token embeddings is 768, the number of transformer blocks
  is 12 and the number of self-attention heads is 12.
- 
 \end_layout
 
 \end_inset
