@@ -41,7 +41,7 @@ figs-within-sections
 \graphics default
 \default_output_format default
 \output_sync 0
-\bibtex_command default
+\bibtex_command bibtex
 \index_command default
 \paperfontsize default
 \spacing single
@@ -69,7 +69,7 @@ figs-within-sections
 \use_package stmaryrd 1
 \use_package undertilde 1
 \cite_engine natbib
-\cite_engine_type authoryear
+\cite_engine_type numerical
 \biblio_style plainnat
 \use_bibtopic false
 \use_indices false
@@ -461,7 +461,8 @@ literal "false"
 \end_inset
 
 , are both publicly available.
- 
+ We will need to take into account some regulations and license conditions
+ concerning data safety and privacy.
 \end_layout
 
 \begin_layout Section
@@ -741,7 +742,14 @@ literature
 \end_inset
 
 : MIMIC-III and eICU.
- According to ...
+ According to 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "johnson_mimic-iii_2016"
+literal "false"
+
+\end_inset
+
  the MIMIC-III dataset is a large, de-identified, and publicly-available
  collection of medical records.
  It consists of 112,000 clinical reports records with an average length
@@ -749,27 +757,39 @@ literature
  The dataset includes 1,159 top-level ICD-9 codes, and each report is assigned
  to 7.6 codes on average.
  This makes for about 78056000 tokens in MIMIC-III.
+ We can make a quick estimate of the amount of compute necessary by using
+ the calculation summarized by Adam Casson 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "casson2023transformerflops"
+literal "false"
+
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note: The calculation presented there was originally made for decoder-only
+ architectures like GPT, while BERT is an encoder-only, bidirectional architectu
+re.
+ For the sake of a rough estimate we disregarded that fact here.
  
-\begin_inset Newline newline
+\end_layout
+
 \end_inset
 
-(?? expand the calculation ?? )
-\begin_inset Newline newline
-\end_inset
+: Using the data above we get about 600 M FLOPs per token.
+ At the number of tokens that amounts to about 46800 TFLOPs for the whole
+ MIMIC-III dataset (that is per epoch).
+ On a GTX 3080 with about 30 TFLOPs/s one training epoch would thus take
+ about 26 min.
+ In original BERT paper
+\begin_inset Foot
+status open
 
-The eICU Collaborative Research Database holds data associated with over
- 200,000 patient stays, providing a large sample size for research studies.
-\begin_inset Newline newline
-\end_inset
-
-(?? expand this ??)
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
+\begin_layout Plain Layout
 According to 
 \begin_inset CommandInset citation
 LatexCommand citet
@@ -783,12 +803,80 @@ literal "false"
  
 \end_layout
 
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "devlin_bert_2019"
+literal "false"
+
+\end_inset
+
+ the pre-training was done for 40 epochs and fine-tuning was done for 2-3
+ epochs on some more specialized NLP tasks.
+ 40 epochs would then take about 17-18 hours.
+ We conclude that for MIMIC-III fine-tuning or some amount of training over
+ the course of several weeks we have availalbe should be possible on our
+ available hardware.
+ 
+\begin_inset Newline newline
+\end_inset
+
+The eICU Collaborative Research Database holds data associated with over
+ 200,000 patient visits.
+ If we assume the same average length per visit (we didn't find any average
+ number in the paper) and we further assume that each report has the same
+ average number of codes, the eICU dataset would comprise very roughly about
+ twice the number of tokens compared to MIMIC-III.
+ So, fine-tuning would still be possible, while many dozens of training
+ rounds should be avoided or at least attempted only very few times.
+ If possible we might want to limit most experiments to MIMIC-III.
+ 
+\end_layout
+
+\begin_layout Subsection
+Pre-processing
+\end_layout
+
 \begin_layout Standard
-(?? use for building an argument over computation time, also using ??)
+On GitHub the authors mention that pre-processing took 1 hour on 128 cores
+ and 60 GB of RAM.
+ It will likely take us significantly longer and if RAM was limiting we
+ might need to rent a cloud node for this part and download the processed
+ data.
+ 
 \end_layout
 
 \begin_layout Section
 Existing Code
+\end_layout
+
+\begin_layout Standard
+The authors Hur et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "hur_unifying_2022"
+literal "false"
+
+\end_inset
+
+ provide code on GitHub
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+https://github.com/hoon9405/DescEmb
+\end_layout
+
+\end_inset
+
+ for pre-processing as well as training.
+ We thus have a reference in case we get stuck with reproducing their results.
+ We will try to rely on pyhealth as much as we can to keep the amount of
+ code we have to write managable.
+ 
 \end_layout
 
 \begin_layout Standard
