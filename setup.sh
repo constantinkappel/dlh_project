@@ -9,7 +9,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # Create data directory (check if it exists)
-if [! -d "/home/$USER/data"]; then
+if [ ! -d "/home/$USER/data"]; then
     mkdir /home/$USER/data
 fi
 
