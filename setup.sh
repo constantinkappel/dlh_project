@@ -8,8 +8,10 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Create data directory
-mkdir /home/$USER/data
+# Create data directory (check if it exists)
+if [! -d "/home/$USER/data"]; then
+    mkdir /home/$USER/data
+fi
 
 # Download pretrained models to checkpoints
 #wget ... -o checkpoints/...
