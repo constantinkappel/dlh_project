@@ -1,6 +1,6 @@
-
+root='../../'
 # W2V training 
-CUDA_VISIBLE_DEVICES=0 python main.py \
+CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
     --distributed_world_size 1 \
     --input_path '/data/DescEmb/output_pretrain' \
     --model ehr_model \
@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
 
 
 # W2V training 
-CUDA_VISIBLE_DEVICES=0 python main.py \
+CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
     --distributed_world_size 1 \
     --input_path '/data/DescEmb/output_pretrain' \
     --model ehr_model \
