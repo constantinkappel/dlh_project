@@ -1,4 +1,4 @@
-The code in this folder was copied from the [GitHub](https://github.com/hoon9405/DescEmb) repository by the authors of `DescEmb`. 
+The code in this folder was modified from the [GitHub](https://github.com/hoon9405/DescEmb) repository by the authors of `DescEmb`. 
 ```bibtex
 @misc{hur2021unifying,
       title={Unifying Heterogenous Electronic Health Records Systems via Text-Based Code Embedding}, 
