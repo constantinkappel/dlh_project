@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create virtual environment
-python -v venv .venv
+python -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
