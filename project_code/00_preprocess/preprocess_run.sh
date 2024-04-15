@@ -22,12 +22,14 @@ python ../preprocess/preprocess_main.py \
 
 python ../preprocess/preprocess_main.py \
     --src_data mimiciii \
+    --dataset_path $INPUT_PATH/mimic \
     --dest_path $OUTPUT_PATH \
     --ccs_dx_tool_path $DX_PATH \
     --data_type pretrain ;
 
 python ../preprocess/preprocess_main.py \
     --src_data eicu \
+    --dataset_path $INPUT_PATH/eicu \
     --dest_path $OUTPUT_PATH \
     --ccs_dx_tool_path $DX_PATH \
     --data_type pretrain ;
@@ -37,5 +39,3 @@ python ../preprocess/preprocess_main.py \
     --dest_path $OUTPUT_PATH \
     --ccs_dx_tool_path $DX_PATH \
     --data_type pretrain ;
-
-
