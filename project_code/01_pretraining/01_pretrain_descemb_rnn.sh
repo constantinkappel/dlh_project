@@ -1,8 +1,8 @@
-root='../../'
+root='../../../DescEmb/'
 # MLM training value mode should be set on NV
 CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
     --distributed_world_size 1 \
-    --input_path '/data/DescEmb/output_pretrain' \
+    --input_path '/data/DescEmb/output' \
     --model descemb_rnn \
     --src_data mimiciii \
     --ratio 100 \
@@ -12,7 +12,7 @@ CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
 # MLM training value mode should be set on NV
 CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
     --distributed_world_size 1 \
-    --input_path '/data/DescEmb/output_pretrain' \
+    --input_path '/data/DescEmb/output' \
     --model descemb_rnn \
     --src_data eicu \
     --ratio 100 \
