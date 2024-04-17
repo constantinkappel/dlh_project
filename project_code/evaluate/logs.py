@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from typing import *
+from tqdm import tqdm
 
 ## Read log files
 
@@ -66,40 +67,61 @@ def get_last_auprc(train_log: List[str], patterns: Dict[str, re.Pattern]):
 def create_pattern_numerical(token: str):
     return re.compile(r"{}: (\d+(\.\d+)?)".format(token))
 
-def extract_metrics(line: str, df_metrics: pd.DataFrame, patterns: Dict[str, re.Pattern], fold: str):
+def extract_metrics(line: str, patterns: Dict[str, re.Pattern]):
     epoch = patterns['epoch'].search(line).group(1)
     loss = patterns['loss'].search(line).group(1)
     auroc = patterns['auroc'].search(line).group(1)
     auprc = patterns['auprc'].search(line).group(1)
-    df = pd.DataFrame({'fold': fold, 'epoch': int(epoch), 'loss': float(loss), 'auroc': float(auroc), 'auprc': float(auprc)}, index=[0])
-    df_metrics = pd.concat([df_metrics, df])
-    return df_metrics
+    return int(epoch), float(loss), float(auroc), float(auprc)
 
 
 def parse_experiment_metrics(root: Union[str, Path], patterns: Dict[str, re.Pattern]):
     l_trainlogs = get_trainlog_paths(root)
-    df_metrics = pd.DataFrame(columns=['run', 'fold', 'epoch', 'loss', 'auroc', 'auprc'])
-    for log in l_trainlogs:
+    print(f"Found {len(l_trainlogs)} train logs.")
+    #df_metrics = pd.DataFrame(columns=['run', 'fold', 'epoch', 'loss', 'auroc', 'auprc'])
+    dict_metrics = {'run': [], 'fold': [], 'epoch': [], 'loss': [], 'auroc': [], 'auprc': []}
+    for log in tqdm(l_trainlogs):
         train_log = read_log(log)
         run = log.parent
         for line in train_log:
             if "[INFO]" in line:
                 if "[train]" in line:
-                    df_metrics = extract_metrics(line, df_metrics, patterns, "train")
-                    df_metrics['run'] = run
+                    epoch, loss, auroc, auprc = extract_metrics(line, patterns)
+                    dict_metrics['run'].append(run)
+                    dict_metrics['fold'].append("train")
+                    dict_metrics['epoch'].append(epoch)
+                    dict_metrics['loss'].append(loss)
+                    dict_metrics['auroc'].append(auroc)
+                    dict_metrics['auprc'].append(auprc)
                 elif "[valid]" in line:
-                    df_metrics = extract_metrics(line, df_metrics, patterns, "valid")
-                    df_metrics['run'] = run
+                    epoch, loss, auroc, auprc = extract_metrics(line, patterns)
+                    dict_metrics['run'].append(run)
+                    dict_metrics['fold'].append("valid")
+                    dict_metrics['epoch'].append(epoch)
+                    dict_metrics['loss'].append(loss)
+                    dict_metrics['auroc'].append(auroc)
+                    dict_metrics['auprc'].append(auprc)
                 elif "[test]" in line:
-                    df_metrics = extract_metrics(line, df_metrics, patterns, "test")
-                    df_metrics['run'] = run
+                    epoch, loss, auroc, auprc = extract_metrics(line, patterns)
+                    dict_metrics['run'].append(run)
+                    dict_metrics['fold'].append("test")
+                    dict_metrics['epoch'].append(epoch)
+                    dict_metrics['loss'].append(loss)
+                    dict_metrics['auroc'].append(auroc)
+                    dict_metrics['auprc'].append(auprc)
+    df_metrics = pd.DataFrame(dict_metrics)
     return df_metrics
 
 ## Plotting etc. 
 
-def plot_metrics(df_metrics: pd.DataFrame, run: str):
-    fig, ax = plt.subplots()
-    for fold in ['train', 'valid', 'test']:
-        df_metrics.loc[(df_metrics['fold']==fold) & (df_metrics['run']==run)].plot(x='epoch', y='loss', ax=ax, label=fold)
-    plt.title(run)
+def plot_metrics(df_metrics: pd.DataFrame, run: str, metrics: List[str] = ['loss', 'auroc', 'auprc']):
+    run = Path(run)
+    ncols = len(metrics)
+    fig, axes = plt.subplots(nrows=1, ncols=ncols, figsize=(15, 5))
+    for i, metric in enumerate(metrics):
+        for fold in ['train', 'valid', 'test']:
+            ax = axes[i]
+            df_metrics.loc[(df_metrics['fold']==fold) & (df_metrics['run']==run)].plot(x='epoch', y=metric, ax=ax, label=fold)
+            ax.set_title(metric)
+    fig.suptitle(run)
     plt.show()
