@@ -146,15 +146,10 @@ class Trainer(object):
             total_train_loss = 0
             auroc_train = 0
             auprc_train = 0
-            logger.info(f"before model.train() epoch {epoch}")
             self.model.train()
-            logger.info(f"after model.train() epoch {epoch}")
 
-            for sample in tqdm.tqdm(self.data_loaders['train']):
-                #pdb.set_trace()
-                #logger.info(f"before optimizer.zero_grad() epoch {epoch}")    
+            for sample in tqdm.tqdm(self.data_loaders['train']):  
                 self.optimizer.zero_grad(set_to_none=True)
-                #logger.info(f"before model(**sample['net_input']) epoch {epoch}")
                 net_output = self.model(**sample["net_input"])
                 #NOTE we assume self.model is wrapped by torch.nn.parallel.data_parallel.DataParallel
                 if self.n_devices > 1:
