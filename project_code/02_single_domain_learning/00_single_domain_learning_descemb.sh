@@ -4,7 +4,7 @@ INPUT_PATH=/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
 root='../DescEmb/'
 embed_models=('descemb_rnn' 'descemb_bert')
-MODEL_PATH=('../DescEmb/outputs/2024-04-19/15-55-40' '../DescEmb/outputs/2024-04-19/06-18-04')
+MODEL_PATH=('../../../outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt' '../../../DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
 tasks=('readmission' 'mortality' 'los_3day' 'los_7day' 'diagnosis')
 value_modes=('NV' 'VA' 'DSVA' 'DSVA_DPE' 'VC')
 
@@ -16,10 +16,12 @@ for data in "${SRC_DATA[@]}"; do
         echo "Processing model: $emb_model with data $data"
         for task in "${tasks[@]}"; do
             for value_mode in "${value_modes[@]}"; do
+                echo "Current directory: $(pwd)" && \
                 CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
                     --distributed_world_size 1 \
                     --input_path "$INPUT_PATH" \
                     --model_path "$model_path" \
+                    --load_pretrained_weights \
                     --model ehr_model \
                     --embed_model "$emb_model" \
                     --pred_model rnn \
