@@ -1,10 +1,20 @@
 #!/bin/bash
 # Run single domain learning with descemb
+# run this from project root folder using
+# ./project_code/02_single_domain_learning/00_single_domain_learning_descemb.sh $(pwd)/project_code
+
+if [ -n "$1" ]; then
+    root="${1%/}/DescEmb/"
+    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt" "${1%/}/DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt")
+else
+    root='../DescEmb/'
+    MODEL_PATH=('../../../outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt' '../../../outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
+fi 
+
 INPUT_PATH=/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
-root='../DescEmb/'
+
 embed_models=('descemb_rnn' 'descemb_bert')
-MODEL_PATH=('../../../outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt' '../../../DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
 tasks=('readmission' 'mortality' 'los_3day' 'los_7day' 'diagnosis')
 value_modes=('NV' 'VA' 'DSVA' 'DSVA_DPE' 'VC')
 
