@@ -5,16 +5,16 @@
 
 if [ -n "$1" ]; then
     root="${1%/}/DescEmb/"
-    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt" "${1%/}/DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt")
+    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt" "${1%/}/DescEmb/outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt")
 else
     root='../DescEmb/'
-    MODEL_PATH=('../../../outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt' '../../../outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
+    MODEL_PATH=('../../../outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt' '../../../outputs/2024-04-19/15-55-40/checkpoints/checkpoint_mimiciii_descemb_rnn_mlm_last.pt')
 fi 
 
 INPUT_PATH=/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
 
-embed_models=('descemb_rnn' 'descemb_bert')
+embed_models=('descemb_bert' 'descemb_rnn')
 tasks=('readmission' 'mortality' 'los_3day' 'los_7day' 'diagnosis')
 value_modes=('NV' 'VA' 'DSVA' 'DSVA_DPE' 'VC')
 
