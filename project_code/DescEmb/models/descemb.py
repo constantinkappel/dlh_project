@@ -36,8 +36,11 @@ class BertTextEncoder(nn.Module):
             with torch.no_grad():
                 self.model = AutoModel.from_pretrained(bert_model_config[args.bert_model][0])
         else:  #Loading Huggingface model with pre-trained parameters
-            self.model = AutoModel.from_pretrained(bert_model_config[args.bert_model][0])
-            self.model = nn.ModuleList(self.model, IdentityLayer())
+            try:
+                self.model = AutoModel.from_pretrained(bert_model_config[args.bert_model][0])
+                self.model = nn.ModuleList(self.model, IdentityLayer())
+            except TypeError:
+                self.model = AutoModel.from_pretrained(bert_model_config[args.bert_model][0])
 
         self.mlm_proj = None
         if args.task == "mlm":
