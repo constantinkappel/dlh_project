@@ -114,13 +114,13 @@ def parse_experiment_metrics(root: Union[str, Path], patterns: Dict[str, re.Patt
 
 ## Plotting etc. 
 
-def plot_metrics(df_metrics: pd.DataFrame, run: str, metrics: List[str] = ['loss', 'auroc', 'auprc']):
+def plot_metrics(df_metrics: pd.DataFrame, run: str, metrics: List[str] = ['loss', 'auroc', 'auprc'], folds: str = ['train', 'valid', 'test']):
     run = Path(run)
     ncols = len(metrics)
     fig, axes = plt.subplots(nrows=1, ncols=ncols, figsize=(15, 5))
     for i, metric in enumerate(metrics):
-        for fold in ['train', 'valid', 'test']:
-            ax = axes[i]
+        for fold in folds:
+            ax = axes[i] if ncols > 1 else axes
             df_metrics.loc[(df_metrics['fold']==fold) & (df_metrics['run']==run)].plot(x='epoch', y=metric, ax=ax, label=fold)
             ax.set_title(metric)
     fig.suptitle(run)
