@@ -33,11 +33,16 @@ def parse_log(train_log: List[str], tokens: List[str]):
                 hyperparams[tok] = match.group(1)
     return hyperparams
 
+def get_last_metric(train_log: List[str], metric: str, patterns: Dict[str, re.Pattern]):
+    for line in train_log[::-1]:
+        hit = patterns[metric].search(line) # e.g. metric = 'auprc'
+        if hit:
+            return hit.group(1)
 
 def parse_experiment(root: Union[str, Path], tokens: List[str], patterns: Dict[str, re.Pattern]=None):
     l_trainlogs = get_trainlog_paths(root)
     df = pd.DataFrame()
-    for log in l_trainlogs:
+    for log in tqdm(l_trainlogs):
         train_log = read_log(log)
         hyperparams = parse_log(train_log, tokens)
         run = log.parent.name
@@ -52,7 +57,8 @@ def parse_experiment(root: Union[str, Path], tokens: List[str], patterns: Dict[s
         df = pd.concat([df, pd.DataFrame(hyperparams, index=[0])])
     if patterns:
         for metric in patterns.keys():
-            df[metric] = df[metric].astype(float)
+            if metric in df.columns:
+                df[metric] = df[metric].astype(float)
         order = tokens + list(patterns.keys())
     else:
         order = tokens
@@ -61,11 +67,7 @@ def parse_experiment(root: Union[str, Path], tokens: List[str], patterns: Dict[s
 
 ## parse metric values
 
-def get_last_metric(train_log: List[str], metric: str, patterns: Dict[str, re.Pattern]):
-    for line in train_log[::-1]:
-        hit = patterns[metric].search(line) # e.g. metric = 'auprc'
-        if hit:
-            return hit.group(1)
+
 
 def create_pattern_numerical(token: str):
     return re.compile(r"{}: (\d+(\.\d+)?)".format(token))
