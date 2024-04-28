@@ -47,23 +47,26 @@ def parse_experiment(root: Union[str, Path], tokens: List[str], patterns: Dict[s
         else:
             hyperparams['done'] = False
         if patterns:
-            hyperparams['auprc'] = get_last_auprc(train_log, patterns)
+            for metric in patterns.keys():
+                hyperparams[metric] = get_last_metric(train_log, metric, patterns)
         df = pd.concat([df, pd.DataFrame(hyperparams, index=[0])])
     if patterns:
-        df['auprc'] = df['auprc'].astype(float)
-        order = ['run', 'done', 'src_data', 'task', 'embed_model', 'model', 'value_mode', 'auprc']
+        for metric in patterns.keys():
+            df[metric] = df[metric].astype(float)
+        order = tokens + list(patterns.keys())
     else:
-        order = ['run', 'done', 'src_data', 'task', 'embed_model', 'model', 'value_mode']
+        order = tokens
+    order = [col for col in order if col in df.columns]# Return dataframe columns which exist 
     return df[order]
 
 ## parse metric values
 
-def get_last_auprc(train_log: List[str], patterns: Dict[str, re.Pattern]):
+def get_last_metric(train_log: List[str], metric: str, patterns: Dict[str, re.Pattern]):
     for line in train_log[::-1]:
-        hit = patterns['auprc'].search(line)
+        hit = patterns[metric].search(line) # e.g. metric = 'auprc'
         if hit:
             return hit.group(1)
-        
+
 def create_pattern_numerical(token: str):
     return re.compile(r"{}: (\d+(\.\d+)?)".format(token))
 
