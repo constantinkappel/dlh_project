@@ -11,7 +11,7 @@ else
     MODEL_PATH=('../../../outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
 fi 
 
-INPUT_PATH=/data/DescEmb/output
+INPUT_PATH=/home/data/output #/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
 
 embed_models=('descemb_bert')
@@ -36,6 +36,7 @@ for data in "${SRC_DATA[@]}"; do
                     --pred_model rnn \
                     --src_data $data \
                     --ratio 100 \
+                    --patience 400 \
                     --value_mode "$value_mode" \
                     --task "$task" ;
             done
