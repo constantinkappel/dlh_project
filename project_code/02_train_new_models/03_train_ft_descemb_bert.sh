@@ -15,7 +15,7 @@ INPUT_PATH=/home/data/output #/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
 
 embed_models=('descemb_bert')
-tasks=('readmission' 'mortality' 'los_3day' 'los_7day' 'diagnosis')
+tasks=('diagnosis' 'los_3day' 'los_7day' 'readmission' 'mortality')
 value_modes=('VA' 'DSVA' 'DSVA_DPE' 'VC')
 
 
