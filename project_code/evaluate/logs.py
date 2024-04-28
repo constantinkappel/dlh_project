@@ -20,7 +20,7 @@ def read_log(path: Union[str, Path]):
 ## Parse log files for hyperparameters
 
 def create_pattern(token: str):
-    return re.compile(r"'{}': '(\w+)'".format(token))
+    return re.compile(r"'{}': '?(\w+)'?".format(token))
 
 def parse_log(train_log: List[str], tokens: List[str]):
     hyperparams = {}
