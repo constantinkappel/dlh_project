@@ -1,0 +1,26 @@
+[2024-04-29 05:26:07,003][models.descemb][INFO] - Preparing to load pre-trained checkpoint /home/dlh_project/project_code/DescEmb/outputs/2024-04-28/09-17-50/checkpoints/checkpoint_mimiciii_descemb_bert_f
+t-mlm_last.pt                                                                                                                                                                                               
+Traceback (most recent call last):                                                                                                                                                                          
+  File "/home/dlh_project/project_code/DescEmb/main.py", line 194, in <module>                                                                                                                              
+    main()                                                                                                                                                                                                  
+  File "/home/dlh_project/project_code/DescEmb/main.py", line 133, in main                                                                                                                                  
+    trainer = Trainer(args)                                                                                                                                                                                 
+  File "/home/dlh_project/project_code/DescEmb/trainers/trainer.py", line 67, in __init__                                                                                                                   
+    model = models.build_model(args)                                                                                                                                                                        
+  File "/home/dlh_project/project_code/DescEmb/models/__init__.py", line 21, in build_model                                                                                                                 
+    return model.build_model(args)                                                                                                                                                                          
+  File "/home/dlh_project/project_code/DescEmb/models/ehr_model.py", line 80, in build_model                                                                                                                
+    return cls(args)                                                                                                                                                                                        
+  File "/home/dlh_project/project_code/DescEmb/models/ehr_model.py", line 32, in __init__                                                                                                                   
+    self.embed_model = self._embed_model.build_model(args)                                                                                                                                                  
+  File "/home/dlh_project/project_code/DescEmb/models/descemb.py", line 76, in build_model                                                                                                                  
+    return cls(args)                                                                                                                                                                                        
+  File "/home/dlh_project/project_code/DescEmb/models/descemb.py", line 65, in __init__                                                                                                                     
+    self.load_state_dict(state_dict, strict=True)                                                                                                                                                           
+  File "/home/dlh_project/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict                                                                                     
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(                                                                                                                               
+RuntimeError: Error(s) in loading state_dict for BertTextEncoder:                                                                                                                                           
+        size mismatch for model.embeddings.token_type_embeddings.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([28, 128]).              
+Current directory: /home/dlh_project                                                                                                                                                                        
+[2024-04-29 05:26:09,075][trainers.trainer][INFO] - {'batch_size': 128,                                                                                                                                     
+ 'bert_model': 'bert_tiny',     
