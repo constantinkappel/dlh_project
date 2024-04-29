@@ -37,7 +37,7 @@ for data in "${SRC_DATA[@]}"; do
                     --pred_model rnn \
                     --src_data $data \
                     --ratio 100 \
-                    --patience 180 \
+                    --patience 90 \
                     --value_mode "$value_mode" \
                     --task "$task" ;
             done
