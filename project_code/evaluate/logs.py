@@ -117,6 +117,34 @@ def parse_experiment_metrics(root: Union[str, Path], patterns: Dict[str, re.Patt
     df_metrics = pd.DataFrame(dict_metrics)
     return df_metrics
 
+def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
+    df['tag'] = len(df) * ['unknown']
+    # CodeEmb RD & W2V
+    df.loc[(df['embed_model'] == 'codeemb') & (df['load_pretrained_weights'] == False), "tag"] = "CodeEmb_RD"
+    df.loc[(df['embed_model'] == 'codeemb') & (df['load_pretrained_weights'] == True), "tag"] = "CodeEmb_W2V"
+    # All transfer experiments
+    df.loc[(df['embed_model'] == 'codeemb') & (df['transfer'] == True), "tag"] = "CodeEmb_Transfer"
+    df.loc[(df['embed_model'] == 'descemb_bert') & (df['transfer'] == True), "tag"] = "DescEmb-BERT_Transfer"
+    df.loc[(df['embed_model'] == 'descemb_rnn') & (df['transfer'] == True), "tag"] = "DescEmb-RNN_Transfer"
+    # All pooled experiments
+    df.loc[(df['embed_model'] == 'codeemb') & (df['src_data'] == 'pooled'), "tag"] = "CodeEmb-Pooled"
+    df.loc[(df['embed_model'] == 'descemb_bert') & (df['src_data'] == 'pooled'), "tag"] = "DescEmb-BERT_Pooled"
+    df.loc[(df['embed_model'] == 'descemb_rnn') & (df['src_data'] == 'pooled'), "tag"] = "DescEmb-RNN_Pooled"
+    # All MLM pretraining experiments
+    df.loc[(df['task'] == 'w2v') & (df['model'] == 'codeemb'), "tag"] = "CodeEmb_Pretrain-W2V"
+    df.loc[(df['task'] == 'mlm') & (df['model'] == 'descemb_bert') & (df['init_bert_params'] == True), "tag"] = "DescEmb-BERT_Pretrain-MLM"
+    df.loc[(df['task'] == 'mlm') & (df['model'] == 'descemb_rnn') & (df['init_bert_params'] == True), "tag"] = "DescEmb-RNN_Pretrain-MLM"
+    # CLS-FT
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['init_bert_params_with_freeze'] == True), "tag"] = "DescEmb-BERT_CLS-FT"
+    # FT
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['init_bert_params'] == True), "tag"] = "DescEmb-BERT_FT"
+    # FT-MLM
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-BERT_FT-MLM"
+    # RNN Scr & Scr-MLM
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == False), "tag"] = "DescEmb-RNN_Scr"
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-RNN_Scr"
+    return df
+
 ## Plotting etc. 
 
 def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: List[str] = ['loss', 'auroc', 'auprc'], folds: str = ['train', 'valid', 'test']):
