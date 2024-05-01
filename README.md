@@ -36,6 +36,17 @@ The code for the project is available in the `project_code` directory. The code 
 
 Further details are found in [00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb](00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb).
 
+## Evaluation
+
+### Parsing experiments
+
+From the root folder of the repository, run the following command to parse the experiment results:
+
+```bash
+python parse_experiments.py
+```
+This will create two Excel spreadsheeds in the outputs folder: `experiments.xlsx' and 'metrics.xlsx'. The former contains the experiment results to keep track of training conditions and AUPRC and the latter contains the metrics for plotting the runs.
+
 ## License
 
 The original code by the authors was published under the MIT License. Our modifications to the code are also published under the MIT License. The original code can be found [here](https://github.com/hoon9405/DescEmb).
