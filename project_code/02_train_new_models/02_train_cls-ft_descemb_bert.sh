@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run training new model using CLS-FT with descemb
 # run this from project root folder using
-# ./project_code/02_single_domain_learning/00_single_domain_learning_descemb.sh $(pwd)/project_code
+# ./project_code/02_train_new_models/02_train_cls-ft_descemb_bert.sh $(pwd)/project_code
 
 if [ -n "$1" ]; then
     root="${1%/}/DescEmb/"

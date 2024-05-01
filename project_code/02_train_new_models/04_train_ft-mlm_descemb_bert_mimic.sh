@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run training new model using FT with descemb
 # run this from project root folder using
-# ./project_code/02_single_domain_learning/00_single_domain_learning_descemb.sh $(pwd)/project_code
+# ./project_code/02_train_new_models/04_train_ft-mlm_descemb_bert_mimic.sh $(pwd)/project_code
 
 if [ -n "$1" ]; then
     root="${1%/}/DescEmb/"

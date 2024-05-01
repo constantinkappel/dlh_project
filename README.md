@@ -36,6 +36,12 @@ The code for the project is available in the `project_code` directory. The code 
 
 Further details are found in [00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb](00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb).
 
+## Training
+
+An overview of the training options is provided below ![](assets/Overview_training_conditions.png)
+
+Further details are found in [00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb](00_DL4H_Team_86_normank2_ajangid2_daniel43.ipynb).
+
 ## Evaluation
 
 ### Parsing experiments
