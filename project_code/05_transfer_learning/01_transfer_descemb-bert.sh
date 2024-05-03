@@ -7,11 +7,30 @@
 # The order of datasets the models were trained on must be reversed compared to the order of SRC_DATA
 if [ -n "$1" ]; then
     root="${1%/}/DescEmb/"
-    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt")
+    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-05-01/14-15-52/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-01/17-38-21/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-01/21-13-52/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/01-48-46/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/05-41-38/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/09-46-47/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/14-27-50/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/17-23-39/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-02/21-41-30/checkpoints/checkpoint_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-03/00-56-25/checkpoints/checkpoint_best.pt")
 else
     root='../DescEmb/'
-    MODEL_PATH=('../../../outputs/2024-04-19/06-18-04/checkpoints/checkpoint_mimiciii_descemb_bert_mlm_last.pt')
+    MODEL_PATH=("../../../outputs/2024-05-01/14-15-52/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-01/17-38-21/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-01/21-13-52/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/01-48-46/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/05-41-38/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/09-46-47/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/14-27-50/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/17-23-39/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-02/21-41-30/checkpoints/checkpoint_best.pt" \
+                "../../../outputs/2024-05-03/00-56-25/checkpoints/checkpoint_best.pt")
 fi 
+
 
 INPUT_PATH=/home/data/output #/data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
@@ -41,6 +60,7 @@ for data in "${SRC_DATA[@]}"; do
                     --ratio 100 \
                     --patience 45 \
                     --value_mode "$value_mode" \
+                    --save_prefix "checkpoint_${data}_${emb_model}_${task}" \
                     --task "$task" ;
             done
         done

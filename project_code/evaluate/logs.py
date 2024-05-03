@@ -118,6 +118,12 @@ def parse_experiment_metrics(root: Union[str, Path], patterns: Dict[str, re.Patt
     return df_metrics
 
 def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
+    # Convert to boolean
+    df['load_pretrained_weights'] = df['load_pretrained_weights'].map({'True': True, 'False': False})
+    df['init_bert_params'] = df['init_bert_params'].map({'True': True, 'False': False})
+    df['init_bert_params_with_freeze'] = df['init_bert_params_with_freeze'].map({'True': True, 'False': False})
+    df['transfer'] = df['transfer'].map({'True': True, 'False': False})
+    # Add tag column
     df['tag'] = len(df) * ['unknown']
     # CodeEmb RD & W2V
     df.loc[(df['embed_model'] == 'codeemb') & (df['load_pretrained_weights'] == False), "tag"] = "CodeEmb_RD"

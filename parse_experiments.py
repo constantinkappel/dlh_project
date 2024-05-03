@@ -18,7 +18,6 @@ if __name__ == "__main__":
     print("Parsing experiments")
     df_experiments = logs.parse_experiment(PATH, TOKENS, PATTERNS)
     df_experiments = logs.tag_experiment(df_experiments)
-    print(df_experiments['tag'])
     print("Saving experiments")
     df_experiments.to_excel(PATH/"experiments.xlsx", index=False)
     print("Parsing metrics")
