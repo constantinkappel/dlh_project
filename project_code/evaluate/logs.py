@@ -139,7 +139,7 @@ def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
     # All MLM pretraining experiments
     df.loc[(df['task'] == 'w2v') & (df['model'] == 'codeemb'), "tag"] = "CodeEmb_Pretrain-W2V"
     df.loc[(df['task'] == 'mlm') & (df['model'] == 'descemb_bert') & (df['init_bert_params'] == True), "tag"] = "DescEmb-BERT_Pretrain-MLM"
-    df.loc[(df['task'] == 'mlm') & (df['model'] == 'descemb_rnn') & (df['init_bert_params'] == True), "tag"] = "DescEmb-RNN_Pretrain-MLM"
+    df.loc[(df['task'] == 'mlm') & (df['model'] == 'descemb_rnn'), "tag"] = "DescEmb-RNN_Pretrain-MLM"
     # CLS-FT
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['init_bert_params_with_freeze'] == True), "tag"] = "DescEmb-BERT_CLS-FT"
     # FT
@@ -149,6 +149,14 @@ def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
     # RNN Scr & Scr-MLM
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == False), "tag"] = "DescEmb-RNN_Scr"
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-RNN_Scr"
+    # DescEmb-BERT_Scr
+    df.loc[(df['model'] == 'ehr_model') & 
+           (df['embed_model'] == 'descemb_bert') & 
+           (df['load_pretrained_weights'] == False) & 
+           (df['init_bert_params_with_freeze'] == False) & 
+           (df['init_bert_params'] == False) & 
+           (df['transfer'] == False) & 
+           (df['src_data'] != 'pooled'), "tag"] = "DescEmb-BERT_Scr"
     return df
 
 ## Plotting etc. 
@@ -171,3 +179,23 @@ def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: L
     fig.suptitle(run)
     plt.tight_layout()
     plt.show()
+    
+## Get best epoch
+def get_best_epoch(df_metrics: pd.DataFrame, run: str, fold: str = 'valid') -> int:
+    """Get the epoch with the lowest loss for a given run and fold.
+
+    Args:
+        df_metrics (pd.DataFrame): Dataframe with metrics
+        run (str): Run name equivalent to folder name in ./outputs
+        fold (str, optional): Which fold use for minimal loss. Defaults to 'valid'.
+
+    Returns:
+        epoch (int): Epoch with minimal loss
+    """
+    df = df_metrics.loc[(df_metrics['run']==run) & (df_metrics['fold']==fold)]
+    return df.loc[df['loss'].idxmin()]['epoch']
+
+def get_metric_at_epoch(df_metrics: pd.DataFrame, epoch: int, run: str, fold: str = 'valid', metric: str = 'auprc'):
+    """Get the metric value at a given epoch for a given run and fold."""
+    df = df_metrics.loc[(df_metrics['run']==run) & (df_metrics['epoch']==epoch) & (df_metrics['fold']==fold), metric]
+    return df.values[0]

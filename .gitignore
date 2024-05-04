@@ -5,6 +5,12 @@ checkpoints
 *.pt 
 *.pth
 *.7z
+*.zip
+*events.out.tfevents*
+*._*
+*.~*
+.~*
+jarvis_id_rsa
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
