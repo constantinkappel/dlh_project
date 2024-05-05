@@ -6,14 +6,16 @@
 
 if [ -n "$1" ]; then
     root="${1%/}/DescEmb/"
-    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-05-04/07-33-59/checkpoints/checkpoint_mimiciii_codeemb_ft-w2v_best.pt")
+    MODEL_PATH=("${1%/}/DescEmb/outputs/2024-05-06/00-43-06/checkpoints/checkpoint_mimiciii_codeemb_w2v_best.pt" \
+                "${1%/}/DescEmb/outputs/2024-05-06/03-26-50/checkpoints/checkpoint_eicu_codeemb_w2v_best.pt")
 else
     root='../DescEmb/'
-    MODEL_PATH=('../../../outputs/2024-05-04/07-33-59/checkpoints/checkpoint_mimiciii_codeemb_ft-w2v_best.pt')
+    MODEL_PATH=("../../../outputs/2024-05-06/00-43-06/checkpoints/checkpoint_mimiciii_codeemb_w2v_best.pt" \
+                "../../../outputs/2024-05-06/03-26-50/checkpoints/checkpoint_eicu_codeemb_w2v_best.pt")
 fi 
 
 INPUT_PATH=/data/DescEmb/output #/home/data/output #/data/DescEmb/output
-SRC_DATA=('mimiciii') # 'eicu')
+SRC_DATA=('mimiciii' 'eicu')
 
 embed_models=('codeemb')
 tasks=('diagnosis' 'los_3day' 'los_7day' 'readmission' 'mortality')
@@ -31,6 +33,8 @@ for data in "${SRC_DATA[@]}"; do
                 CUDA_VISIBLE_DEVICES=0 python ${root}main.py \
                     --distributed_world_size 1 \
                     --input_path "$INPUT_PATH" \
+                    --model_path "$model_path" \
+                    --load_pretrained_weights \
                     --model ehr_model \
                     --embed_model "$emb_model" \
                     --pred_model rnn \

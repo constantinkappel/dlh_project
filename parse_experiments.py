@@ -8,7 +8,7 @@ with warnings.catch_warnings():
     
 ## Global variables
 PATH = Path("outputs")
-TOKENS = ['run', 'done', 'src_data', 'task', 'value_mode', 'embed_model', 'model', 'load_pretrained_weights', 'init_bert_params', 'init_bert_params_with_freeze', 'transfer']
+TOKENS = ['run', 'done', 'src_data', 'task', 'value_mode', 'embed_model', 'model', 'load_pretrained_weights', 'init_bert_params', 'init_bert_params_with_freeze', 'transfer', 'patience']
 metrics = ['epoch','loss','auroc', 'auprc']
 # create a pattern dictionay with the metrics as keys
 PATTERNS = {metric: logs.create_pattern_numerical(metric) for metric in metrics}

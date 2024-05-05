@@ -67,8 +67,6 @@ def parse_experiment(root: Union[str, Path], tokens: List[str], patterns: Dict[s
 
 ## parse metric values
 
-
-
 def create_pattern_numerical(token: str):
     return re.compile(r"{}: (\d+(\.\d+)?)".format(token))
 
@@ -78,7 +76,6 @@ def extract_metrics(line: str, patterns: Dict[str, re.Pattern]):
     auroc = patterns['auroc'].search(line).group(1)
     auprc = patterns['auprc'].search(line).group(1)
     return int(epoch), float(loss), float(auroc), float(auprc)
-
 
 def parse_experiment_metrics(root: Union[str, Path], patterns: Dict[str, re.Pattern]):
     l_trainlogs = get_trainlog_paths(root)
@@ -161,7 +158,7 @@ def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
 
 ## Plotting etc. 
 
-def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: List[str] = ['loss', 'auroc', 'auprc'], folds: str = ['train', 'valid', 'test']):
+def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: List[str] = ['loss', 'auroc', 'auprc'], folds: str = ['train', 'valid', 'test'], subtitles: List[str] = []):
     ncols = len(metrics)
     if isinstance(run, str):
         run = [run]
@@ -171,12 +168,16 @@ def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: L
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(width, height))
     axes = axes.ravel() if nrows > 1 else axes
     for j, r in enumerate(run):
+        if len(subtitles) > 0:
+            subtitle = subtitles[j]+": "
+        else:
+            subtitle = None
         for i, metric in enumerate(metrics):
             for fold in folds:
                 ax = axes[j*len(metrics) + i] if ncols > 1 else axes
                 df_metrics.loc[(df_metrics['fold']==fold) & (df_metrics['run']==r)].plot(x='epoch', y=metric, ax=ax, label=fold)
-                ax.set_title(metric)
-    fig.suptitle(run)
+                ax.set_title(f"{subtitle}{metric} ")
+    if len(subtitles) == 0: fig.suptitle(run)
     plt.tight_layout()
     plt.show()
     

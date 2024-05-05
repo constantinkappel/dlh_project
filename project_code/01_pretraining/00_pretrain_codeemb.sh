@@ -9,7 +9,7 @@ else
     root='../DescEmb/'
 fi 
 
-INPUT_PATH=/data/DescEmb/output #/home/data/output # /data/DescEmb/output
+INPUT_PATH=/home/data/output #/home/data/output # /data/DescEmb/output
 SRC_DATA=('mimiciii' 'eicu')
 MODEL='codeemb'
 TASK='w2v'
