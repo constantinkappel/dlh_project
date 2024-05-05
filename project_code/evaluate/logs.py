@@ -148,7 +148,7 @@ def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-BERT_FT-MLM"
     # RNN Scr & Scr-MLM
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == False), "tag"] = "DescEmb-RNN_Scr"
-    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-RNN_Scr"
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-RNN_Scr-MLM"
     # DescEmb-BERT_Scr
     df.loc[(df['model'] == 'ehr_model') & 
            (df['embed_model'] == 'descemb_bert') & 
@@ -180,7 +180,7 @@ def plot_metrics(df_metrics: pd.DataFrame, run: Union[str|List[str]], metrics: L
     plt.tight_layout()
     plt.show()
     
-## Get best epoch
+## Creating result tables
 def get_best_epoch(df_metrics: pd.DataFrame, run: str, fold: str = 'valid') -> int:
     """Get the epoch with the lowest loss for a given run and fold.
 
@@ -199,3 +199,22 @@ def get_metric_at_epoch(df_metrics: pd.DataFrame, epoch: int, run: str, fold: st
     """Get the metric value at a given epoch for a given run and fold."""
     df = df_metrics.loc[(df_metrics['run']==run) & (df_metrics['epoch']==epoch) & (df_metrics['fold']==fold), metric]
     return df.values[0]
+
+def create_result_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.DataFrame):
+    table = pd.DataFrame()
+    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmission'])*4)
+    table['value_mode'] = ['VA', 'DSVA', 'DSVA_DPE', 'VC']*5
+    tags = list(tag2run.keys()) # tags are columns for experiment type in the table
+    for tag in tqdm(tags): 
+        runs = tag2run[tag] # Get list of runs for the tag
+        for run in runs:
+            try:
+                task = df_exp.loc[(df_exp['run']==run), 'task'].values[0]
+                value_mode = df_exp.loc[(df_exp['run']==run), 'value_mode'].values[0]
+                best = get_best_epoch(df_metrics, run=run)
+                auprc = get_metric_at_epoch(df_metrics, best, run)
+                table.loc[(table['task']==task) & (table['value_mode']==value_mode), tag] = auprc
+            except:
+                print(f"Error in {run}")
+                table.loc[(table['task']==task) & (table['value_mode']==value_mode), tag] = np.nan
+    return table
