@@ -24,6 +24,6 @@ for src_data in "${SRC_DATA}"; do
         --ratio 100 \
         --value_mode NV \
         --save_prefix "checkpoint_${src_data}_${MODEL}_ft-${TASK}" \
-        --patience 200 \
+        --patience 45 \
         --task "$TASK" ;
 done

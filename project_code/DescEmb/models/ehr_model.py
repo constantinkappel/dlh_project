@@ -4,6 +4,7 @@ import logging
 import torch
 from torch._C import Value
 import torch.nn as nn
+import pdb
 
 from models import register_model, MODEL_REGISTRY
 
@@ -86,13 +87,14 @@ class EHRModel(nn.Module):
         return sample['label'].float()
 
     def forward(self, value, **kwargs):
+        pdb.set_trace()
         x = self.embed_model(**kwargs)  # (B, S, E)
        
         if self.val_proj:
             # value shape is expected to be (B, S, 1)
             value = value.unsqueeze(dim=2)
             val_emb = self.val_proj(value)
-            
+
             x = torch.cat((x, val_emb), dim=2)
             x = self.post_embed_proj(x)
 

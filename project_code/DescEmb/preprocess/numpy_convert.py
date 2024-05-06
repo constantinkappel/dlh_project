@@ -271,39 +271,40 @@ def pooled_data_generation(
                 pooled_text_input
                 )
         
-        
-        mimic_vocab_path = os.path.join(
-            dest_path, 'mimiciii', f'code_index_{value_mode}_vocab.pkl'
-            )
-        
-        with open(mimic_vocab_path, 'rb') as file:
-                mimic_vocab_dict = pickle.load(file)
-
-        mimic_code_input = np.load(os.path.join(
-            dest_path, 'mimiciii', f'code_index_{value_mode}.npy'), 
-            allow_pickle=True
-            )        
-        eicu_code_input = np.load(os.path.join(
-            dest_path, 'eicu', f'code_index_{value_mode}.npy'),
-            allow_pickle=True
-            )    
-
-        # 0 = [PAD], 1 = [CLS], 2=[MASK]
-        eicu_code_input = np.where(
-            np.isin(eicu_code_input, [0, 1, 2], invert=True),
-            eicu_code_input + len(mimic_vocab_dict),
-            eicu_code_input
-        )
-
-        # pooled_code_input
-        pooled_code_input = np.concatenate(
-            [mimic_code_input, eicu_code_input], axis=0
-            )
-        
-        np.save(os.path.join(
-            dest_path, 'pooled', f'code_index_{value_mode}.npy'), 
-                pooled_code_input
+        # For CodeEmb there is no DSVA_DPE mode, so we need the following condition
+        if value_mode != 'DSVA_DPE':
+            mimic_vocab_path = os.path.join(
+                dest_path, 'mimiciii', f'code_index_{value_mode}_vocab.pkl'
                 )
+            
+            with open(mimic_vocab_path, 'rb') as file:
+                    mimic_vocab_dict = pickle.load(file)
+
+            mimic_code_input = np.load(os.path.join(
+                dest_path, 'mimiciii', f'code_index_{value_mode}.npy'), 
+                allow_pickle=True
+                )        
+            eicu_code_input = np.load(os.path.join(
+                dest_path, 'eicu', f'code_index_{value_mode}.npy'),
+                allow_pickle=True
+                )    
+
+            # 0 = [PAD], 1 = [CLS], 2=[MASK]
+            eicu_code_input = np.where(
+                np.isin(eicu_code_input, [0, 1, 2], invert=True),
+                eicu_code_input + len(mimic_vocab_dict),
+                eicu_code_input
+            )
+
+            # pooled_code_input
+            pooled_code_input = np.concatenate(
+                [mimic_code_input, eicu_code_input], axis=0
+                )
+            
+            np.save(os.path.join(
+                dest_path, 'pooled', f'code_index_{value_mode}.npy'), 
+                    pooled_code_input
+                    )
 
     # seq_len 
     mimic_seq_len = np.load(os.path.join(dest_path, 'mimiciii', 'seq_len.npy'))
