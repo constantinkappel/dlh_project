@@ -59,6 +59,7 @@ for data in "${SRC_DATA[@]}"; do
                     --ratio 100 \
                     --patience 45 \
                     --value_mode "$value_mode" \
+                    --save_prefix "checkpoint_${data}_${emb_model}_${task}" \
                     --task "$task" ;
             done
         done
