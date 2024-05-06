@@ -144,7 +144,7 @@ def tag_experiment(df: pd.DataFrame) -> pd.DataFrame:
     # FT-MLM
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_bert') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-BERT_FT-MLM"
     # RNN Scr & Scr-MLM
-    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == False), "tag"] = "DescEmb-RNN_Scr"
+    df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == False) & (df['transfer'] == False), "tag"] = "DescEmb-RNN_Scr"
     df.loc[(df['model'] == 'ehr_model') & (df['embed_model'] == 'descemb_rnn') & (df['load_pretrained_weights'] == True), "tag"] = "DescEmb-RNN_Scr-MLM"
     # DescEmb-BERT_Scr
     df.loc[(df['model'] == 'ehr_model') & 
