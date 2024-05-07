@@ -196,7 +196,7 @@ def get_best_epoch(df_metrics: pd.DataFrame, run: str, fold: str = 'valid') -> i
         epoch (int): Epoch with minimal loss
     """
     df = df_metrics.loc[(df_metrics['run']==run) & (df_metrics['fold']==fold)]
-    return df.loc[df['loss'].idxmin()]['epoch']
+    return df.loc[df['loss'].idiagnosismin()]['epoch']
 
 def get_metric_at_epoch(df_metrics: pd.DataFrame, epoch: int, run: str, fold: str = 'valid', metric: str = 'auprc'):
     """Get the metric value at a given epoch for a given run and fold."""
@@ -205,7 +205,7 @@ def get_metric_at_epoch(df_metrics: pd.DataFrame, epoch: int, run: str, fold: st
 
 def create_result_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.DataFrame):
     table = pd.DataFrame()
-    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmission'])*4)
+    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmissionission'])*4)
     table['value_mode'] = ['VA', 'DSVA', 'DSVA_DPE', 'VC']*5
     tags = list(tag2run.keys()) # tags are columns for experiment type in the table
     for tag in tqdm(tags): 
@@ -225,7 +225,7 @@ def create_result_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.Data
 def create_analysis_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.DataFrame):
     tags = list(tag2run.keys()) # tags are columns for experiment type in the table
     table = pd.DataFrame()
-    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmission'])*4*len(tags))
+    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmissionission'])*4*len(tags))
     table['value_mode'] = ['VA', 'DSVA', 'DSVA_DPE', 'VC']*5*len(tags)
     table['run'] = ['']*20*len(tags)
     table['tag'] = ['']*20*len(tags)
@@ -243,24 +243,27 @@ def create_analysis_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.Da
                 table.loc[(table['task']==task) & (table['value_mode']==value_mode), tag] = np.nan
     return table
 
-def plot_all_umaps(table, fig_size):
-    fig = plt.figure(figsize=(fig_size,fig_size))
-    axes = fig.subplots(24, 5)
+def plot_all_umaps(table):
+    ncols = 5
+    nrows = 24
+    height = 5*nrows
+    width = 5*4
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(width, height))
     unique_task = table['task'].unique()
     
-    for tIdx, t in tqdm(enumerate(unique_task)):
+    for tIdiagnosis, t in tqdm(enumerate(unique_task)):
         task_rows = table[table['task'] == t]
-        for rIdx in range(task_rows.shape[0]):
+        for rIdiagnosis in range(task_rows.shape[0]):
             try:
-                experiment = task_rows.iloc[rIdx]
+                experiment = task_rows.iloc[rIdiagnosis]
                 run_path = experiment['run']
                 checkpoint_path = os.path.join(run_path, 'checkpoints/checkpoint_best.pt')
                 checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
                 model_embeddings = checkpoint['model_state_dict']['embed_model.post_encode_proj.weight']
                 title = f"{experiment['task']}_{experiment['value_mode']}_{experiment['tag']}"
-                draw_umap(model_embeddings, ax=axes[rIdx,tIdx], n_components=2, title=title)
+                draw_umap(model_embeddings, ax=axes[rIdiagnosis,tIdiagnosis], n_components=2, title=title)
             except:
-                axes[rIdx,tIdx].set_aspect('equal', adjustable='box')
+                # axes[rIdiagnosis,tIdiagnosis].set_aspect('equal', adjustable='box')
                 continue
     plt.tight_layout()
         
@@ -283,4 +286,4 @@ def draw_umap(data, ax, n_neighbors=15, min_dist=0.1, n_components=2, metric='eu
         ax.scatter(u[:,0], u[:,1], u[:,2], s=100)
     ax.set_title(title, fontsize=12)
     
-    ax.set_aspect('equal', adjustable='box')
+    # ax.set_aspect('equal', adjustable='box')
