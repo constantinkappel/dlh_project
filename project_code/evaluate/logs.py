@@ -251,19 +251,18 @@ def plot_all_umaps(table):
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(width, height))
     unique_task = table['task'].unique()
     
-    for tIdiagnosis, t in tqdm(enumerate(unique_task)):
+    for tIdx, t in tqdm(enumerate(unique_task)):
         task_rows = table[table['task'] == t]
-        for rIdiagnosis in range(task_rows.shape[0]):
+        for rIdx in range(task_rows.shape[0]):
             try:
-                experiment = task_rows.iloc[rIdiagnosis]
+                experiment = task_rows.iloc[rIdx]
                 run_path = experiment['run']
                 checkpoint_path = os.path.join(run_path, 'checkpoints/checkpoint_best.pt')
                 checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
                 model_embeddings = checkpoint['model_state_dict']['embed_model.post_encode_proj.weight']
                 title = f"{experiment['task']}_{experiment['value_mode']}_{experiment['tag']}"
-                draw_umap(model_embeddings, ax=axes[rIdiagnosis,tIdiagnosis], n_components=2, title=title)
+                draw_umap(model_embeddings, ax=axes[rIdx,tIdx], n_components=2, title=title)
             except:
-                # axes[rIdiagnosis,tIdiagnosis].set_aspect('equal', adjustable='box')
                 continue
     plt.tight_layout()
         
