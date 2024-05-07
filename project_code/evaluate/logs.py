@@ -196,7 +196,7 @@ def get_best_epoch(df_metrics: pd.DataFrame, run: str, fold: str = 'valid') -> i
         epoch (int): Epoch with minimal loss
     """
     df = df_metrics.loc[(df_metrics['run']==run) & (df_metrics['fold']==fold)]
-    return df.loc[df['loss'].idiagnosismin()]['epoch']
+    return df.loc[df['loss'].idxmin()]['epoch']
 
 def get_metric_at_epoch(df_metrics: pd.DataFrame, epoch: int, run: str, fold: str = 'valid', metric: str = 'auprc'):
     """Get the metric value at a given epoch for a given run and fold."""
