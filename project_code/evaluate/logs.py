@@ -5,7 +5,9 @@ import numpy as np
 from pathlib import Path
 from typing import *
 from tqdm import tqdm
-
+import umap
+import os
+import torch
 ## Read log files
 
 def get_trainlog_paths(root: Union[str, Path]):
@@ -219,3 +221,66 @@ def create_result_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.Data
                 print(f"Error in {run}")
                 table.loc[(table['task']==task) & (table['value_mode']==value_mode), tag] = np.nan
     return table
+
+def create_analysis_table(tag2run: dict, df_exp: pd.DataFrame, df_metrics: pd.DataFrame):
+    tags = list(tag2run.keys()) # tags are columns for experiment type in the table
+    table = pd.DataFrame()
+    table['task'] = sorted(list(['diagnosis', 'mortality', 'los_3day', 'los_7day', 'readmission'])*4*len(tags))
+    table['value_mode'] = ['VA', 'DSVA', 'DSVA_DPE', 'VC']*5*len(tags)
+    table['run'] = ['']*20*len(tags)
+    table['tag'] = ['']*20*len(tags)
+    for tag in tqdm(tags): 
+        runs = tag2run[tag] # Get list of runs for the tag
+        for run in runs:
+            try:
+                task = df_exp.loc[(df_exp['run']==run), 'task'].values[0]
+                value_mode = df_exp.loc[(df_exp['run']==run), 'value_mode'].values[0]
+                best = get_best_epoch(df_metrics, run=run)
+                table.loc[(table['task']==task) & (table['value_mode']==value_mode), 'tag'] = tag
+                table.loc[(table['task']==task) & (table['value_mode']==value_mode), 'run'] = run
+            except:
+                print(f"Error in {run}")
+                table.loc[(table['task']==task) & (table['value_mode']==value_mode), tag] = np.nan
+    return table
+
+def plot_all_umaps(table, fig_size):
+    fig = plt.figure(figsize=(fig_size,fig_size))
+    axes = fig.subplots(24, 5)
+    unique_task = table['task'].unique()
+    
+    for tIdx, t in tqdm(enumerate(unique_task)):
+        task_rows = table[table['task'] == t]
+        for rIdx in range(task_rows.shape[0]):
+            try:
+                experiment = task_rows.iloc[rIdx]
+                run_path = experiment['run']
+                checkpoint_path = os.path.join(run_path, 'checkpoints/checkpoint_best.pt')
+                checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
+                model_embeddings = checkpoint['model_state_dict']['embed_model.post_encode_proj.weight']
+                title = f"{experiment['task']}_{experiment['value_mode']}_{experiment['tag']}"
+                draw_umap(model_embeddings, ax=axes[rIdx,tIdx], n_components=2, title=title)
+            except:
+                axes[rIdx,tIdx].set_aspect('equal', adjustable='box')
+                continue
+    plt.tight_layout()
+        
+def draw_umap(data, ax, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title=''):
+    reducer = umap.UMAP(
+        n_neighbors=n_neighbors,
+        min_dist=min_dist,
+        n_components=n_components,
+        metric=metric
+    )
+    u = reducer.fit_transform(data)
+    if n_components == 1:
+        #ax.scatter(u[:,0], range(len(u)), c=data)
+        ax.scatter(u[:,0], range(len(u)))
+    if n_components == 2:
+        #ax.scatter(u[:,0], u[:,1], c=data)
+        ax.scatter(u[:,0], u[:,1])
+    if n_components == 3:
+        #ax.scatter(u[:,0], u[:,1], u[:,2], c=data, s=100)
+        ax.scatter(u[:,0], u[:,1], u[:,2], s=100)
+    ax.set_title(title, fontsize=12)
+    
+    ax.set_aspect('equal', adjustable='box')
