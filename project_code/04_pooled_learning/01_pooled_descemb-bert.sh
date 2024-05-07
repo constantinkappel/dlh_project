@@ -16,13 +16,14 @@ fi
 
 INPUT_PATH=/home/data/output #/data/DescEmb/output
 SRC_DATA=('pooled')
+EVAL_DATA=('mimiciii' 'eicu')
 
 embed_models=('descemb_bert')
 tasks=('diagnosis' 'los_3day' 'los_7day' 'readmission' 'mortality')
 value_modes=('DSVA_DPE')
 
 
-for data in "${SRC_DATA[@]}"; do
+for eval_data in "${EVAL_DATA[@]}"; do
     for index in "${!embed_models[@]}"; do
         emb_model=${embed_models[$index]}
         model_path=${MODEL_PATH[$index]}
@@ -37,9 +38,10 @@ for data in "${SRC_DATA[@]}"; do
                     --model ehr_model \
                     --embed_model "$emb_model" \
                     --pred_model rnn \
-                    --src_data $data \
+                    --src_data $SRC_DATA \
+                    --eval_data $eval_data \
                     --ratio 100 \
-                    --patience 45 \
+                    --patience 25 \
                     --value_mode "$value_mode" \
                     --save_prefix "checkpoint_${data}_${emb_model}_${task}" \
                     --task "$task" ;

@@ -210,7 +210,7 @@ def main():
     if args.src_data =='pooled':
         pooled_data_generation(
             args.dest_path, 
-            args.value_mode, 
+            args.value_mode + ['DSVA_DPE'], 
             args.seeds, 
             args.target_tasks,
             args.data_type
